@@ -1,5 +1,6 @@
 # RS_courese
-Recommend System Course Homework<br>
+Recommend System Course Homework
 徐浩榆 2020223040020
 
-hw1 run main.py <br> 
+## hw1 PMF
+run main.py
