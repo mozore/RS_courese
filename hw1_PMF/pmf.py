@@ -91,7 +91,12 @@ class PMF:
         if (uid < 0) or (uid > self.n_users):
             print("用户id错误")
             return 0
-        top_k = np.zeros(self.n_movies)
+        ratings = np.zeros(self.n_movies)
+        r_k = np.zeros(k)
+        idx_k = np.zeros(k)
+        top_k = np.zeros((k, 2))
         for mid in range(self.n_movies):
-            top_k[mid] = np.dot(self.U[uid], self.V[mid])
-        return np.argsort(top_k)[::-1][0:k]
+            ratings[mid] = np.dot(self.U[uid], self.V[mid])
+        top_k[:, 0] = np.argsort(ratings)[::-1][0:k]
+        top_k[:, 1] = np.sort(ratings)[::-1][0:k]
+        return top_k

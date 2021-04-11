@@ -20,7 +20,8 @@ if __name__ == "__main__":
     plt.ylabel('RMSE')
     plt.legend()
     plt.show()
-    # 计算用户2的推荐电影候选
-    print(pmf.top_k(2, 3))
-
-
+    # 计算用户2的3个推荐电影候选
+    top_k = pmf.top_k(2, 5)
+    print("用户2的推荐序列如下")
+    for (i, r) in top_k:
+        print("(电影：{}, 推荐分值：{})".format(int(i), round(r, 2)))
