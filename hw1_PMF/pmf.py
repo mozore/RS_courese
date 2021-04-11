@@ -21,8 +21,14 @@ class PMF:
         self.e = 0  # 迭代轮数的index
         self.U = None  # 用户矩阵
         self.V = None  # 物品矩阵
+        self.n_users = 0  # 用户数量
+        self.n_movies = 0  # 电影数量
 
-    def fit(self, train_data, test_data, n_users, n_movies):
+    def set_num(self, n_users, n_movies):
+        self.n_users = n_users
+        self.n_movies = n_movies
+
+    def fit(self, train_data, test_data):
         """
 
         :param train_data: 训练数据
@@ -35,8 +41,8 @@ class PMF:
         n_test = test_data.shape[0]
         if self.U is None or self.V is None:
             self.e = 0  # 初始化迭代次数
-            self.U = np.random.rand(n_users, self.n_feat)  # 随机初始化用户向量
-            self.V = np.random.rand(n_movies, self.n_feat)  # 随机初始化电影向量
+            self.U = np.random.rand(self.n_users, self.n_feat)  # 随机初始化用户向量
+            self.V = np.random.rand(self.n_movies, self.n_feat)  # 随机初始化电影向量
             # print(self.U)
         # RMSE参数
         train_rmse = []
@@ -75,3 +81,17 @@ class PMF:
             rmse += (r_ij - np.dot(self.U[i].T, self.V[j])) ** 2
         rmse = math.sqrt(rmse / len(data))
         return rmse
+
+    def top_k(self, uid, k):
+        """
+        :param uid: 需要计算的用户id
+        :param k: 取多少个电影候选
+        :return: k个最佳电影id
+        """
+        if (uid < 0) or (uid > self.n_users):
+            print("用户id错误")
+            return 0
+        top_k = np.zeros(self.n_movies)
+        for mid in range(self.n_movies):
+            top_k[mid] = np.dot(self.U[uid], self.V[mid])
+        return np.argsort(top_k)[::-1][0:k]
